@@ -1,0 +1,4 @@
+{
+  "presets": ["airbnb", "env"],
+  "plugins": ["react-flow-props-to-prop-types"]
+}

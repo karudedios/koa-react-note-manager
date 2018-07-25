@@ -1,0 +1,18 @@
+{
+  "extends": [ "airbnb" ],
+  
+  "parser": "babel-eslint",
+  
+  "plugins": [
+    "flowtype"
+  ],
+  
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module"
+  },
+  
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  }
+}
