@@ -1,10 +1,10 @@
 import Koa from 'koa';
-import models from './models';
+import * as models from './models';
 import mongoose from 'mongoose';
 
 const port = process.env.PORT || 3000;
 const ip = process.env.IP || '0.0.0.0';
-const mongodbUrl = process.env.DBURL || 'mongodb://localhost:27017/krnm';
+const mongodbUrl = process.env.DBURL || 'mongodb://0.0.0.0:27017/krnm';
 
 mongoose.connect(mongodbUrl, {
   useNewUrlParser: true

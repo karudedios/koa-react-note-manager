@@ -41,7 +41,7 @@
     "test:server": "mocha server/**/*.spec.js",
     "test:client": "mocha client/**/*.spec.js",
     "test": "npm run test:server && npm run test:client",
-    "start": "nodemon server/index.js --exec babel-node"
+    "start:dev": "nodemon server/index.js --exec babel-node"
   },
   "repository": {
     "type": "git",
