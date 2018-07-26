@@ -22,7 +22,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^5.2.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-import": "^2.13.0",
@@ -31,6 +31,7 @@
     "flow": "^0.2.3",
     "flow-bin": "^0.77.0",
     "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
     "prop-types": "^15.6.2"
   },
   "scripts": {
@@ -39,7 +40,8 @@
     "lint": "npm run lint:server && npm run lint:client",
     "test:server": "mocha server/**/*.spec.js",
     "test:client": "mocha client/**/*.spec.js",
-    "test": "npm run test:server && npm run test:client"
+    "test": "npm run test:server && npm run test:client",
+    "start:dev": "nodemon server/index.js --exec babel-node"
   },
   "repository": {
     "type": "git",
