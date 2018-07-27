@@ -1,5 +1,4 @@
 import chai from 'chai';
-import proxyquire from 'proxyquire';
 import mongooseMockFactory from './mocks/mongoose';
 import chaiAsPromised from 'chai-as-promised';
 import { AttachmentService } from '../services';
@@ -32,7 +31,7 @@ describe("Attachment Service", function() {
     mongooseMockFactory.tearDown(done);
   });
   
-  describe('.new', function(done) {
+  describe('.new', function() {
     it("should create attachments so long as there's a noteId associated", function() {
       const noteOid = Types.ObjectId();
       
