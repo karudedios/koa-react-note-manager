@@ -5,6 +5,8 @@ export const AttachmentSchema = new Schema({
     required: true,
     type: String,
   },
+  
+  note: { required:true, type: Schema.Types.ObjectId, ref: "Note" }
 });
 
 export default mongoose.model('Attachment', AttachmentSchema);

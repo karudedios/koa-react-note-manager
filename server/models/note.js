@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-import { AttachmentSchema } from './attachment';
 
 export const NoteSchema = new Schema({
   title: {
@@ -30,7 +29,7 @@ export const NoteSchema = new Schema({
     type: Date,
   },
   
-  attachments: [ AttachmentSchema ]
+  attachments: [{ type: Schema.Types.ObjectId, ref: "Attachment" }]
 });
 
 export default mongoose.model('Note', NoteSchema);

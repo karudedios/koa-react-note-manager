@@ -1,4 +1,12 @@
 {
-  "presets": ["airbnb", "env"],
-  "plugins": ["react-flow-props-to-prop-types"]
+  "presets": ["airbnb", ["env", {
+    targets: {
+      node: "8.11.3"
+    }
+  }]],
+  "plugins": [
+    "react-flow-props-to-prop-types",
+    "transform-class-properties",
+    "transform-async-to-generator"
+  ]
 }
