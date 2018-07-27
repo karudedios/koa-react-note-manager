@@ -51,7 +51,7 @@
     "coverage:server": "nyc --reporter=lcov -- npm run test:server",
     "coverage:client": "nyc --reporter=lcov -- npm run test:client",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
-    "coverage": "coverage:server",
+    "coverage": "npm run coverage:server",
     "coverage:clear": "rm -rf ./coverage"
   },
   "repository": {
