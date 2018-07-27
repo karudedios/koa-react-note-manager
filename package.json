@@ -49,11 +49,16 @@
     "test:client": "mocha --exit --timeout 120000 --reporter progress --require babel-core/register client/**/*.spec.js",
     "test": "npm run test:server",
     "start:dev": "nodemon server/index.js --exec babel-node",
-    "coverage:server": "nyc --reporter=lcov -- npm run test:server",
-    "coverage:client": "nyc --reporter=lcov -- npm run test:client",
+    "coverage:server": "nyc --reporter=lcovonly -- npm run test:server",
+    "coverage:client": "nyc --reporter=lcovonly -- npm run test:client",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
     "coverage": "npm run coverage:server",
     "coverage:clear": "rm -rf ./coverage"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js"
+    ]
   },
   "repository": {
     "type": "git",
