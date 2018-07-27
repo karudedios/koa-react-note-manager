@@ -1,0 +1,7 @@
+{
+  "name": "koa-react-note-manager",
+  "alias": [
+    "note-manager"
+  ],
+  "type": "npm"
+}
