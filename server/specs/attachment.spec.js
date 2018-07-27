@@ -1,5 +1,4 @@
 import chai from 'chai';
-import proxyquire from 'proxyquire';
 import mongooseMockFactory from './mocks/mongoose';
 import chaiAsPromised from 'chai-as-promised';
 import { AttachmentService } from '../services';
@@ -10,38 +9,46 @@ chai.use(chaiAsPromised);
 chai.should();
 
 describe("Attachment Service", function() {
-  beforeEach(function(done) {
-    mongooseMockFactory.setUp(done);  
+  let service;
+  
+  before(function(done) {
+    mongooseMockFactory.setUp(function(err) {
+      if (err) return done(err);
+      
+      const Model = require('../models/attachment').default;
+      
+      service = new AttachmentService(Model);
+      
+      done();
+    });
   });
   
   afterEach(function(done) {
+    mongooseMockFactory.reset(done);
+  });
+  
+  after(function(done) {
     mongooseMockFactory.tearDown(done);
   });
   
-  const Model = proxyquire('../models/attachment', {
-    mongoose: mongooseMockFactory.mock
-  }).default;
-  
-  const service = new AttachmentService(Model);
-  
-  describe('.new', function(done) {
+  describe('.create', function() {
     it("should create attachments so long as there's a noteId associated", function() {
       const noteOid = Types.ObjectId();
       
-      return service.new({
+      return service.create({
         note: noteOid,
         url: '/file.ext',
       }).should.be.fulfilled.and.eventually.have.property('note').deep.equal(noteOid);
     });
     
     it("should fail if no note is provided", function() {
-      return service.new({
+      return service.create({
         url: '/file.ext'
       }).should.be.rejected.and.eventually.have.property('errors').have.property('note');
     });
     
     it("should fail if no url is provided", function() {
-      return service.new({
+      return service.create({
         note: Types.ObjectId()
       }).should.be.rejected.and.eventually.have.property('errors').have.property('url');
     });
@@ -50,17 +57,18 @@ describe("Attachment Service", function() {
   describe(".findAll", function() {
     let attachments;
     
-    beforeEach(function() {
+    beforeEach(function(done) {
       let oid = Types.ObjectId();
       
-      return Promise.all([
-        service.new({ note: oid, url: '/1.ext' }),
-        service.new({ note: oid, url: '/2.ext' }),
-        service.new({ note: Types.ObjectId(), url: '/3.ext' }),
-        service.new({ note: Types.ObjectId(), url: '/4.ext' })
+      Promise.all([
+        service.create({ note: oid, url: '/1.ext' }),
+        service.create({ note: oid, url: '/2.ext' }),
+        service.create({ note: Types.ObjectId(), url: '/3.ext' }),
+        service.create({ note: Types.ObjectId(), url: '/4.ext' })
       ]).then(function(results) {
         attachments = results;
-      });
+        done();
+      }).catch(done);
     });
     
     it("should find all note-associated attachments if { note } is provided", function() {
@@ -85,13 +93,14 @@ describe("Attachment Service", function() {
   describe('.find', function() {
     let attachments;
     
-    beforeEach(function() {
-      return Promise.all([
-        service.new({ note: Types.ObjectId(), url: '/1.ext' }),
-        service.new({ note: Types.ObjectId(), url: '/1.ext' }),
+    beforeEach(function(done) {
+      Promise.all([
+        service.create({ note: Types.ObjectId(), url: '/1.ext' }),
+        service.create({ note: Types.ObjectId(), url: '/1.ext' }),
       ]).then(atts => {
         attachments = atts;
-      });
+        done();
+      }).catch(done);
     });
     
     it("should return first occurence matching predicate", function() {
@@ -107,36 +116,37 @@ describe("Attachment Service", function() {
     });
   });
   
-  describe('.delete', function() {
+  describe('.remove', function() {
     let attachments;
     
-    beforeEach(function() {
-      return Promise.all([
-        service.new({ note: Types.ObjectId(), url: '/1.ext' }),
-        service.new({ note: Types.ObjectId(), url: '/1.ext' }),
+    beforeEach(function(done) {
+      Promise.all([
+        service.create({ note: Types.ObjectId(), url: '/1.ext' }),
+        service.create({ note: Types.ObjectId(), url: '/1.ext' }),
       ]).then(atts => {
         attachments = atts;
-      });
+        done();
+      }).catch(done);
     });
     
     it('should remove attachment if any stored attachment matches predicate', function() {
-      return service.delete(attachments[0]._id).should.be.fulfilled.and.eventually.equal(true).then(function() {
+      return service.remove(attachments[0]._id).should.be.fulfilled.and.eventually.equal(true).then(function() {
         return service.find(attachments[0]._id).should.be.fulfilled.and.eventually.equal(null);
       });
     });
     
     it('should remove multiple attachments if the id of all was provided', function() {
-      return service.delete(...attachments.map(a => a._id)).should.be.fulfilled.and.eventually.equal(true).then(function() {
+      return service.remove(...attachments.map(a => a._id)).should.be.fulfilled.and.eventually.equal(true).then(function() {
         return service.findAll().should.be.fulfilled.and.eventually.have.lengthOf(0);
       });
     });
     
     it('should return false if there was nothing to delete', function() {
-      return service.delete(Types.ObjectId()).should.be.fulfilled.and.eventually.equal(false);
+      return service.remove(Types.ObjectId()).should.be.fulfilled.and.eventually.equal(false);
     });
     
     it('should throw an error if no nothing is provided', function() {
-      return service.delete().should.be.rejected.and.eventually.have.property('message').equal("Must provide at least one id to delete");
+      return service.remove().should.be.rejected.and.eventually.have.property('message').equal("Must provide at least one id to delete");
     });
   });
 });

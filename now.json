@@ -1,0 +1,14 @@
+{
+  "name": "koa-react-note-manager",
+  "alias":"koa-react-note-manager",
+  "type": "npm",
+  "env": {
+    "DB": "@db"
+  },
+  "scale": {
+    "bru1": {
+      "min": 0,
+      "max": "auto"
+    }
+  }
+}

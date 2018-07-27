@@ -24,6 +24,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.0.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -33,19 +34,32 @@
     "flow": "^0.2.3",
     "flow-bin": "^0.77.0",
     "mocha": "^5.2.0",
+    "mockgoose": "^7.3.5",
     "mongoose-mock": "^0.4.0",
     "nodemon": "^1.18.3",
+    "nyc": "^12.0.2",
     "prop-types": "^15.6.2",
     "proxyquire": "^2.0.1"
   },
   "scripts": {
     "lint:server": "eslint server/ && flow server/",
     "lint:client": "eslint client/ && flow client/",
-    "lint": "npm run lint:server && npm run lint:client",
-    "test:server": "mocha --reporter progress --require babel-core/register server/**/*.spec.js",
-    "test:client": "mocha --reporter progress --require babel-core/register client/**/*.spec.js",
-    "test": "npm run test:server && npm run test:client",
-    "start:dev": "nodemon server/index.js --exec babel-node"
+    "lint": "npm run lint:server",
+    "test:server": "mocha --exit --timeout 120000 --reporter progress --require babel-core/register server/**/*.spec.js",
+    "test:client": "mocha --exit --timeout 120000 --reporter progress --require babel-core/register client/**/*.spec.js",
+    "test": "npm run test:server",
+    "start:dev": "nodemon server/index.js --exec babel-node",
+    "start": "babel-node server/index.js",
+    "coverage:server": "nyc --reporter=lcovonly -- npm run test:server",
+    "coverage:client": "nyc --reporter=lcovonly -- npm run test:client",
+    "coverage:report": "cat ./coverage/lcov.info | coveralls",
+    "coverage": "npm run coverage:server",
+    "coverage:clear": "rm -rf ./coverage"
+  },
+  "nyc": {
+    "exclude": [
+      "**/specs/*"
+    ]
   },
   "repository": {
     "type": "git",
