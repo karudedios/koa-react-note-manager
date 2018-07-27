@@ -10,19 +10,27 @@ chai.use(chaiAsPromised);
 chai.should();
 
 describe("Attachment Service", function() {
-  beforeEach(function(done) {
-    mongooseMockFactory.setUp(done);  
+  let service;
+  
+  before(function(done) {
+    mongooseMockFactory.setUp(function(err) {
+      if (err) return done(err);
+      
+      const Model = require('../models/attachment').default;
+      
+      service = new AttachmentService(Model);
+      
+      done();
+    });
   });
   
   afterEach(function(done) {
-    mongooseMockFactory.tearDown(done);
+    mongooseMockFactory.reset(done);
   });
   
-  const Model = proxyquire('../models/attachment', {
-    mongoose: mongooseMockFactory.mock
-  }).default;
-  
-  const service = new AttachmentService(Model);
+  after(function(done) {
+    mongooseMockFactory.tearDown(done);
+  });
   
   describe('.new', function(done) {
     it("should create attachments so long as there's a noteId associated", function() {
@@ -50,17 +58,18 @@ describe("Attachment Service", function() {
   describe(".findAll", function() {
     let attachments;
     
-    beforeEach(function() {
+    beforeEach(function(done) {
       let oid = Types.ObjectId();
       
-      return Promise.all([
+      Promise.all([
         service.new({ note: oid, url: '/1.ext' }),
         service.new({ note: oid, url: '/2.ext' }),
         service.new({ note: Types.ObjectId(), url: '/3.ext' }),
         service.new({ note: Types.ObjectId(), url: '/4.ext' })
       ]).then(function(results) {
         attachments = results;
-      });
+        done();
+      }).catch(done);
     });
     
     it("should find all note-associated attachments if { note } is provided", function() {
@@ -85,13 +94,14 @@ describe("Attachment Service", function() {
   describe('.find', function() {
     let attachments;
     
-    beforeEach(function() {
-      return Promise.all([
+    beforeEach(function(done) {
+      Promise.all([
         service.new({ note: Types.ObjectId(), url: '/1.ext' }),
         service.new({ note: Types.ObjectId(), url: '/1.ext' }),
       ]).then(atts => {
         attachments = atts;
-      });
+        done();
+      }).catch(done);
     });
     
     it("should return first occurence matching predicate", function() {
@@ -110,13 +120,14 @@ describe("Attachment Service", function() {
   describe('.delete', function() {
     let attachments;
     
-    beforeEach(function() {
-      return Promise.all([
+    beforeEach(function(done) {
+      Promise.all([
         service.new({ note: Types.ObjectId(), url: '/1.ext' }),
         service.new({ note: Types.ObjectId(), url: '/1.ext' }),
       ]).then(atts => {
         attachments = atts;
-      });
+        done();
+      }).catch(done);
     });
     
     it('should remove attachment if any stored attachment matches predicate', function() {
