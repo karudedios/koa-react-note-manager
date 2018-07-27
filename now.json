@@ -3,5 +3,8 @@
   "alias": [
     "note-manager"
   ],
-  "type": "npm"
+  "type": "npm",
+  "env": {
+    "DB": "@db"
+  }
 }

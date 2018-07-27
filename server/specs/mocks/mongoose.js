@@ -6,7 +6,7 @@ const mockgoose = new Mockgoose(mongoose);
 export default {
   setUp: async function(cb) {
     await mockgoose.prepareStorage();
-    mongoose.connect('mongodb://0.0.0.0:27017/test', { useNewUrlParser: true }, cb);
+    mongoose.connect(null, { useNewUrlParser: true }, cb);
   },
   
   reset: async function(cb) {
