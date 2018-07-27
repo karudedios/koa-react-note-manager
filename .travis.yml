@@ -1,7 +1,7 @@
 language: node_js
 
 install:
-  - npm ci
+  - npm i
 
 script:
   - npm run test
