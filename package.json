@@ -4,6 +4,7 @@
   "description": "Project done with Koa &amp; React/Redux in order to manage note application.",
   "main": "server/index.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
