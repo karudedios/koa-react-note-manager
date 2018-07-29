@@ -1,6 +1,5 @@
 import { join } from 'path';
 import buildApi from './api';
-import { readSync } from 'fs';
 import Express from 'express';
 import mongoose from 'mongoose';
 import * as Models from './models';
@@ -16,8 +15,7 @@ mongoose.connect(mongodbUrl, {
   useNewUrlParser: true
 });
 
-
-Express()
+const app = Express()
   .use(fileUpload())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({

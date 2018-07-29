@@ -26,8 +26,6 @@ function mapErrorToResponse(error) {
   return { message: error.message, status };
 }
 
-<<<<<<< Updated upstream
-=======
 /**
  * @typedef Note
  * @property {string}   _id                 - Object Id of the Note
@@ -161,47 +159,12 @@ export const deleteNote = (noteService) => ({ params }) => {
 };
 
 
->>>>>>> Stashed changes
 export default function (noteService, attachmentService) {
   return new Router()
-    
-    .get('/', respondFromPromise(() =>
-      noteService.findAll({})))
-    
-    .get('/upcoming', respondFromPromise(() => {
-      const now = new Date();
-      const fiveMinutesInThefuture = new Date();
-      
-      fiveMinutesInThefuture.setMinutes(now.getMinutes() + 5);
-      
-      return noteService.findAll({
-        notificationEnabled: true,
-        notificationDate: {
-          $gte: now,
-          $lte: fiveMinutesInThefuture
-        }
-      });
-    }))
-    
-    .get('/:id', respondFromPromise(({ params }) =>
-      noteService.find({ _id: params.id })))
-
-    .post('/', respondFromPromise(({ body, files }) => {
-      return Promise.all(
-        Object.keys(files || {}).map(f => {
-          const file = files[f];
-          const url = `/attachments/${file.name}`;
-          return file.mv(url).then(() => {
-            return attachmentService.create({ url });
-          });
-        })).then(attachments => {
-          return noteService.create(Object.assign({ attachments }, body));
-        });
-    }))
-    
-    .put('/:id', respondFromPromise(({ params, body }) => 
-      noteService.update(params.id, body)))
-      
-    .delete('/:id', respondFromPromise(({ params }) => 
-      noteService.remove(params.id)));
+    .get('/', getAll(noteService))
+    .get('/:id', getById(noteService))
+    .put('/:id', updateNote(noteService))
+    .delete('/:id', deleteNote(noteService))
+    .get('/upcoming', getUpcoming(noteService))
+    .post('/', createNote(noteService, attachmentService));
 }
