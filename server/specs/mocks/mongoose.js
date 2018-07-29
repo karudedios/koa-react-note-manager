@@ -17,5 +17,9 @@ export default {
   tearDown: async function(cb) {
     await mongoose.disconnect();
     cb();
+  },
+  
+  clearCollection: async function(collectionName, cb) {
+    await mongoose.connection.dropCollection(collectionName, cb);
   }
 };
