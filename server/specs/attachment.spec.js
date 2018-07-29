@@ -103,6 +103,10 @@ describe("Attachment Service", function() {
       }).catch(done);
     });
     
+    afterEach(function(done) {
+      mongooseMockFactory.clearCollection('attachments', done);
+    });
+    
     it("should return first occurence matching predicate", function() {
       return service.find({
         url: '/1.ext'

@@ -11,9 +11,10 @@ export const NoteSchema = new Schema({
     type: String,
   },
   
-  deletedAt: {
+  archived: {
     required: false,
-    type: Date,
+    default: false,
+    type: Boolean,
   },
   
   notificationEnabled: {
@@ -24,7 +25,7 @@ export const NoteSchema = new Schema({
   
   notificationDate: {
     required() {
-      return [this.notificationEnabled, "A notification date is required"];
+      return this.notificationEnabled;
     },
     type: Date,
   },
