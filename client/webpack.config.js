@@ -6,7 +6,7 @@ const Compression = require('compression-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = Object.assign({
-  devtool: isProduction ? null : 'source-map',
+  devtool: isProduction ? false : 'source-map',
   mode: isProduction ? 'production' : 'development',
 
   entry: {
@@ -15,7 +15,6 @@ module.exports = Object.assign({
   },
 
   resolve: {
-    unsafeCache: /node_modules/,
     extensions: ['.js', '/index.js'],
     modules: [resolve('client', 'src'), 'node_modules'],
   },

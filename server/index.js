@@ -56,9 +56,9 @@ if (isDeveloping) {
   app.use(webpackHotMiddleware(compiler));
   app.use(Express.static(join(__dirname, 'client', 'dist', 'index.html')));
 } else {
-  app.use(Express.static(__dirname + '/client/dist'));
+  app.use(Express.static(join(__dirname, 'client', 'dist')));
   app.get('*', function response(req, res) {
-    res.sendFile(join(__dirname, '/client/dist/index.html'));
+    res.sendFile(join(__dirname, '..', '/client/dist/index.html'));
   });
 }
 
