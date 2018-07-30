@@ -33,13 +33,14 @@ ReactDOM.render(
         <Switch>
           <Route
             exact
-            path="/" render={() => (
+            path="/"
+            render={() => (
               <h1>
                 What up
               </h1>
             )}
           />
-          
+
           <Route
             render={() => (
               <h1>

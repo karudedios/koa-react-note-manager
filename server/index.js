@@ -28,7 +28,8 @@ const app = Express()
     }, function(err) {
       if (err) return next(err);
     });
-  });
+  })
+  .use(Express.static(join(__dirname, '..', 'client', 'dist')));
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 
@@ -40,29 +41,27 @@ if (isDeveloping) {
 
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
-    publicPath: config.output.publicPath,
+    writeToDisk: true,
     contentBase: 'client/src',
+    publicPath: config.output.publicPath,
     stats: {
       hash: false,
       colors: true,
-      chunks: true,
-      timings: true,
+      chunks: false,
+      timings: false,
       modules: false,
-      chunkModules: true,
+      chunkModules: false,
     }
   });
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-  app.use(Express.static(join(__dirname, 'client', 'dist', 'index.html')));
-} else {
-  app.use(Express.static(join(__dirname, 'client', 'dist')));
-  app.get('*', function response(req, res) {
-    res.sendFile(join(__dirname, '..', '/client/dist/index.html'));
-  });
 }
 
 app
+  .get('*', function response(req, res) {
+    res.sendFile(join(__dirname, '..', '/client/dist/index.html'));
+  })
   .listen(port, ip, () => {
     // eslint-disable-next-line
     console.log(`Server listening on ${ip}:${port}`);

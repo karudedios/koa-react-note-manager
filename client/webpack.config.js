@@ -11,7 +11,20 @@ module.exports = Object.assign({
 
   entry: {
     app: './client/src/app.js',
-    vendor: './client/src/vendor.js',
+    vendor: [
+      'axios',
+      'react',
+      'redux',
+      'history',
+      'react-dom',
+      'redux-saga',
+      'react-redux',
+      'react-router',
+      'is-mergeable-object',
+      'connected-react-router',
+      'material-ui',
+      'material-ui-icons',
+    ],
   },
 
   resolve: {

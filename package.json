@@ -68,7 +68,7 @@
     "test:server": "mocha --exit --timeout 120000 --reporter progress --require babel-core/register server/**/*.spec.js",
     "test:client": "mocha --exit --timeout 120000 --reporter progress --require babel-core/register client/**/*.spec.js",
     "test": "npm run test:server",
-    "start:dev": "NODE_ENV=development nodemon server/index.js --exec babel-node",
+    "start:dev": "NODE_ENV=development nodemon --ignore client/ server/index.js --exec babel-node",
     "build": "NODE_ENV=production webpack --config client/webpack.config.js",
     "start": "NODE_ENV=production babel-node server/index.js",
     "coverage:server": "nyc --reporter=lcovonly -- npm run test:server",
