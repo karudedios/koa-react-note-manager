@@ -1,55 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import createSagaMiddleware from 'redux-saga';
-import { createBrowserHistory } from 'history';
-import { compose, createStore, applyMiddleware } from 'redux';
-import { connectRouter, routerMiddleware, ConnectedRouter } from 'connected-react-router';
 import { Switch, Route } from 'react-router';
+import { ConnectedRouter } from 'connected-react-router';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
-import saga from './sagas';
-import reducer from './reducers';
-
-const history = createBrowserHistory();
-
-const sagaMiddleware = createSagaMiddleware();
-
-const store = createStore(
-  connectRouter(history)(reducer),
-  compose(
-    applyMiddleware(
-      routerMiddleware(history),
-      sagaMiddleware,
-    ),
-  ),
-);
-
-sagaMiddleware.run(saga);
+import theme from './theme';
+import { store, history } from './store';
+import Layout from './components/Layout';
+import NoteList from './containers/NoteList';
 
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <div>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <h1>
-                What up
-              </h1>
-            )}
-          />
+      <MuiThemeProvider theme={theme}>
+        <Layout>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <NoteList />
+              )}
+            />
 
-          <Route
-            render={() => (
-              <h1>
-                Default?
-              </h1>
-            )}
-          />
-        </Switch>
-      </div>
+            <Route
+              render={() => (
+                <NoteList />
+              )}
+            />
+          </Switch>
+        </Layout>
+      </MuiThemeProvider>
     </ConnectedRouter>
   </Provider>,
 

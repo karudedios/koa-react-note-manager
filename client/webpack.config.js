@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const HappyPack = require('happypack');
 const HtmlWebpack = require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const Compression = require('compression-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -22,9 +23,23 @@ module.exports = Object.assign({
       'react-router',
       'is-mergeable-object',
       'connected-react-router',
-      'material-ui',
-      'material-ui-icons',
+      '@material-ui/core',
+      '@material-ui/icons',
     ],
+  },
+
+  optimization: {
+    runtimeChunk: 'single',
+
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'all',
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/]/,
+        },
+      },
+    },
   },
 
   resolve: {
@@ -59,6 +74,13 @@ module.exports = Object.assign({
     new HtmlWebpack({
       path: resolve('client', 'public'),
       template: resolve('client/src/index.html'),
+    }),
+
+    new UglifyJSPlugin({
+      parallel: true,
+      sourceMap: true,
+      test: /\.txt($|\?)/i,
+      uglifyOptions: { ecma: 5 },
     }),
   ].concat(!isProduction ? [] : [
     new Compression({

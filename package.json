@@ -4,6 +4,8 @@
   "description": "Project done with Koa &amp; React/Redux in order to manage note application.",
   "main": "server/index.js",
   "dependencies": {
+    "@material-ui/core": "^1.4.2",
+    "@material-ui/icons": "^2.0.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "connected-react-router": "^4.3.0",
@@ -12,8 +14,6 @@
     "express-swagger-generator": "^1.1.6",
     "history": "^4.7.2",
     "is-mergeable-object": "^1.1.0",
-    "material-ui": "next",
-    "material-ui-icons": "^1.0.0-beta.15",
     "mongodb": "^3.1.1",
     "mongoose": "^5.2.5",
     "react": "^16.4.1",
